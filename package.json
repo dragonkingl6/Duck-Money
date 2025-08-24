@@ -1,0 +1,51 @@
+{
+  "name": "duck-money",
+  "version": "1.0.0",
+  "description": "Thư viện quy đổi tiền tệ chính xác cho tất cả quốc gia sử dụng JavaScript thuần",
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c -w",
+    "lint": "eslint src/**/*.js",
+    "format": "prettier --write src/**/*.js"
+  },
+  "keywords": [
+    "currency",
+    "exchange",
+    "rate",
+    "converter",
+    "money",
+    "forex",
+    "tien-te",
+    "quy-doi"
+  ],
+  "author": "Currency Exchange Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dragonkingl6/duck-money.git"
+  },
+  "bugs": {
+    "url": "https://github.com/dragonkingl6/duck-money/issues"
+  },
+      "homepage": "https://github.com/dragonkingl6/duck-money#readme",
+
+  "devDependencies": {
+    "@babel/core": "^7.23.0",
+    "@babel/preset-env": "^7.22.20",
+    "@rollup/plugin-babel": "^6.0.3",
+    "@rollup/plugin-commonjs": "^25.0.4",
+    "@rollup/plugin-node-resolve": "^15.1.0",
+    "eslint": "^8.50.0",
+    "prettier": "^3.0.3",
+    "rollup": "^3.28.1",
+    "rollup-plugin-terser": "^7.0.2"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ]
+}
