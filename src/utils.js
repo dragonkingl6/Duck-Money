@@ -57,6 +57,68 @@ export function formatAmount(amount, options = {}) {
 }
 
 /**
+ * Format số tiền thành dạng ngắn gọn (K, M, B, T)
+ * @param {number} amount - Số tiền
+ * @param {string} currency - Mã tiền tệ
+ * @param {number} decimals - Số chữ số thập phân (mặc định: 1)
+ * @returns {string} Số tiền đã format ngắn gọn
+ */
+export function formatShortAmount(amount, currency = 'VND', decimals = 1) {
+  if (amount === 0) return `0 ${currency}`;
+  
+  const absAmount = Math.abs(amount);
+  const sign = amount < 0 ? '-' : '';
+  
+  let formattedAmount;
+  let suffix = '';
+  
+  if (absAmount >= 1e12) {
+    formattedAmount = (absAmount / 1e12).toFixed(decimals);
+    suffix = 'T';
+  } else if (absAmount >= 1e9) {
+    formattedAmount = (absAmount / 1e9).toFixed(decimals);
+    suffix = 'B';
+  } else if (absAmount >= 1e6) {
+    formattedAmount = (absAmount / 1e6).toFixed(decimals);
+    suffix = 'M';
+  } else if (absAmount >= 1e3) {
+    formattedAmount = (absAmount / 1e3).toFixed(decimals);
+    suffix = 'K';
+  } else {
+    formattedAmount = absAmount.toFixed(decimals);
+  }
+  
+  // Loại bỏ .0 nếu không cần thiết
+  if (decimals === 0 || formattedAmount.endsWith('.0')) {
+    formattedAmount = formattedAmount.replace(/\.0+$/, '');
+  }
+  
+  return `${sign}${formattedAmount}${suffix} ${currency}`;
+}
+
+/**
+ * Format số tiền thành dạng có dấu phẩy ngăn cách (1,000,000)
+ * @param {number} amount - Số tiền
+ * @param {string} currency - Mã tiền tệ
+ * @param {number} decimals - Số chữ số thập phân (mặc định: 0)
+ * @returns {string} Số tiền đã format với dấu phẩy
+ */
+export function formatNumberAmount(amount, currency = 'VND', decimals = 0) {
+  if (amount === 0) return `0 ${currency}`;
+  
+  const absAmount = Math.abs(amount);
+  const sign = amount < 0 ? '-' : '';
+  
+  // Format số với dấu phẩy ngăn cách
+  const formattedAmount = absAmount.toLocaleString('en-US', {
+    minimumFractionDigits: decimals,
+    maximumFractionDigits: decimals
+  });
+  
+  return `${sign}${formattedAmount} ${currency}`;
+}
+
+/**
  * Chuyển đổi số thành từ đọc tiếng Việt
  * @param {number} number - Số cần chuyển đổi
  * @returns {string} Số đọc bằng tiếng Việt

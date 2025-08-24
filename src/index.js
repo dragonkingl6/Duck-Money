@@ -1,10 +1,5 @@
-/**
- * Thư viện quy đổi tiền tệ bằng JavaScript thuần
- * Không sử dụng API bên ngoài, tỷ giá được lưu cố định trong code
- */
 class CurrencyExchange {
   constructor() {
-    // Tỷ giá cố định (cập nhật định kỳ)
     this.exchangeRates = {
       USD: {
         EUR: 0.85,
@@ -128,7 +123,6 @@ class CurrencyExchange {
       }
     };
 
-    // Tạo tỷ giá cho tất cả các cặp tiền tệ
     this.generateAllRates();
     
     this.supportedCurrencies = {
@@ -254,16 +248,11 @@ class CurrencyExchange {
     };
   }
 
-  /**
-   * Tạo tỷ giá cho tất cả các cặp tiền tệ
-   */
   generateAllRates() {
     const currencies = Object.keys(this.exchangeRates.USD);
     
-    // Thêm USD vào danh sách
     currencies.push('USD');
     
-    // Tạo tỷ giá cho tất cả các cặp
     for (const fromCurrency of currencies) {
       if (!this.exchangeRates[fromCurrency]) {
         this.exchangeRates[fromCurrency] = {};
@@ -273,13 +262,10 @@ class CurrencyExchange {
         if (fromCurrency === toCurrency) {
           this.exchangeRates[fromCurrency][toCurrency] = 1;
         } else if (fromCurrency === 'USD') {
-          // Từ USD sang tiền tệ khác
           this.exchangeRates[fromCurrency][toCurrency] = this.exchangeRates.USD[toCurrency];
         } else if (toCurrency === 'USD') {
-          // Từ tiền tệ khác sang USD
           this.exchangeRates[fromCurrency][toCurrency] = 1 / this.exchangeRates.USD[fromCurrency];
         } else {
-          // Từ tiền tệ A sang tiền tệ B (qua USD)
           const usdToFrom = 1 / this.exchangeRates.USD[fromCurrency];
           const usdToTo = this.exchangeRates.USD[toCurrency];
           this.exchangeRates[fromCurrency][toCurrency] = usdToFrom * usdToTo;
@@ -288,28 +274,13 @@ class CurrencyExchange {
     }
   }
 
-  /**
-   * Lấy danh sách tất cả tiền tệ được hỗ trợ
-   * @returns {Object} Danh sách tiền tệ với mã và tên tiếng Việt
-   */
   getSupportedCurrencies() {
     return this.supportedCurrencies;
   }
 
-  /**
-   * Kiểm tra xem tiền tệ có được hỗ trợ không
-   * @param {string} currency - Mã tiền tệ (VD: USD, EUR, VND)
-   * @returns {boolean} True nếu được hỗ trợ
-   */
   isSupported(currency) {
     return currency.toUpperCase() in this.supportedCurrencies;
   }
-
-  /**
-   * Lấy tỷ giá từ dữ liệu cố định
-   * @param {string} baseCurrency - Tiền tệ cơ sở (VD: USD)
-   * @returns {Object} Dữ liệu tỷ giá
-   */
   getExchangeRates(baseCurrency = 'USD') {
     const rates = this.exchangeRates[baseCurrency.toUpperCase()];
     if (!rates) {
@@ -323,51 +294,8 @@ class CurrencyExchange {
     };
   }
 
-  /**
-   * Quy đổi tiền tệ - API đơn giản
-   * @param {number} amount - Số tiền cần quy đổi
-   * @param {string} fromCurrency - Tiền tệ nguồn (VD: 'USD', 'EUR', 'VND')
-   * @param {string} toCurrency - Tiền tệ đích (VD: 'USD', 'EUR', 'VND')
-   * @returns {number} Số tiền đã quy đổi
-   */
-  convert(amount, fromCurrency, toCurrency) {
-    if (!this.isSupported(fromCurrency)) {
-      throw new Error(`Tiền tệ nguồn ${fromCurrency} không được hỗ trợ`);
-    }
-    
-    if (!this.isSupported(toCurrency)) {
-      throw new Error(`Tiền tệ đích ${toCurrency} không được hỗ trợ`);
-    }
 
-    if (amount <= 0) {
-      throw new Error('Số tiền phải lớn hơn 0');
-    }
 
-    try {
-      const fromRate = this.exchangeRates[fromCurrency.toUpperCase()];
-      const toRate = fromRate[toCurrency.toUpperCase()];
-      
-      if (!toRate) {
-        throw new Error('Không thể lấy tỷ giá cho một trong các tiền tệ');
-      }
-
-      // Quy đổi trực tiếp
-      const convertedAmount = amount * toRate;
-      
-      return Math.round(convertedAmount * 1000000) / 1000000; // Làm tròn 6 chữ số thập phân
-    } catch (error) {
-      throw new Error(`Lỗi quy đổi: ${error.message}`);
-    }
-  }
-
-  /**
-   * Quy đổi tiền tệ với thông tin chi tiết
-   * @param {number} amount - Số tiền cần quy đổi
-   * @param {string} fromCurrency - Tiền tệ nguồn
-   * @param {string} toCurrency - Tiền tệ đích
-   * @param {string} baseCurrency - Tiền tệ cơ sở (mặc định: USD)
-   * @returns {Object} Kết quả quy đổi chi tiết
-   */
   convertDetailed(amount, fromCurrency, toCurrency, baseCurrency = 'USD') {
     if (!this.isSupported(fromCurrency)) {
       throw new Error(`Tiền tệ nguồn ${fromCurrency} không được hỗ trợ`);
@@ -389,14 +317,16 @@ class CurrencyExchange {
         throw new Error('Không thể lấy tỷ giá cho một trong các tiền tệ');
       }
 
-      // Quy đổi trực tiếp
       const convertedAmount = amount * toRate;
+      const roundedAmount = Math.round(convertedAmount * 1000000) / 1000000;
       
       return {
         amount: amount,
         fromCurrency: fromCurrency.toUpperCase(),
         toCurrency: toCurrency.toUpperCase(),
-        convertedAmount: Math.round(convertedAmount * 1000000) / 1000000, // Làm tròn 6 chữ số thập phân
+        convertedAmount: roundedAmount,
+        convertedAmountFormat: this.formatCompact(roundedAmount),
+        convertedAmountCommas: this.formatWithCommas(roundedAmount),
         rate: toRate,
         timestamp: Math.floor(Date.now() / 1000),
         baseCurrency: baseCurrency.toUpperCase()
@@ -406,20 +336,26 @@ class CurrencyExchange {
     }
   }
 
-  /**
-   * Quy đổi nhiều tiền tệ cùng lúc - API đơn giản
-   * @param {number} amount - Số tiền cần quy đổi
-   * @param {string} fromCurrency - Tiền tệ nguồn
-   * @param {Array<string>} toCurrencies - Danh sách tiền tệ đích
-   * @returns {Object} Kết quả quy đổi dạng object
-   */
   convertMultiple(amount, fromCurrency, toCurrencies) {
     const results = {};
     
     for (const toCurrency of toCurrencies) {
       try {
-        const convertedAmount = this.convert(amount, fromCurrency, toCurrency);
-        results[toCurrency] = convertedAmount;
+        const fromRate = this.exchangeRates[fromCurrency.toUpperCase()];
+        const toRate = fromRate[toCurrency.toUpperCase()];
+        
+        if (!toRate) {
+          throw new Error('Không thể lấy tỷ giá cho một trong các tiền tệ');
+        }
+
+        const convertedAmount = amount * toRate;
+        const roundedAmount = Math.round(convertedAmount * 1000000) / 1000000;
+        
+        results[toCurrency] = {
+          amount: roundedAmount,
+          format: this.formatCompact(roundedAmount),
+          commas: this.formatWithCommas(roundedAmount)
+        };
       } catch (error) {
         results[toCurrency] = { error: error.message };
       }
@@ -428,14 +364,6 @@ class CurrencyExchange {
     return results;
   }
 
-  /**
-   * Quy đổi nhiều tiền tệ với thông tin chi tiết
-   * @param {number} amount - Số tiền cần quy đổi
-   * @param {string} fromCurrency - Tiền tệ nguồn
-   * @param {Array<string>} toCurrencies - Danh sách tiền tệ đích
-   * @param {string} baseCurrency - Tiền tệ cơ sở
-   * @returns {Array} Danh sách kết quả quy đổi chi tiết
-   */
   convertMultipleDetailed(amount, fromCurrency, toCurrencies, baseCurrency = 'USD') {
     const results = [];
     
@@ -456,62 +384,21 @@ class CurrencyExchange {
     return results;
   }
 
-  /**
-   * Lấy tỷ giá hiện tại giữa hai tiền tệ
-   * @param {string} fromCurrency - Tiền tệ nguồn
-   * @param {string} toCurrency - Tiền tệ đích
-   * @param {string} baseCurrency - Tiền tệ cơ sở
-   * @returns {number} Tỷ giá
-   */
   getRate(fromCurrency, toCurrency, baseCurrency = 'USD') {
     const result = this.convertDetailed(1, fromCurrency, toCurrency, baseCurrency);
     return result.rate;
   }
 
-  /**
-   * Lấy tỷ giá cho tất cả tiền tệ từ một tiền tệ cơ sở
-   * @param {string} baseCurrency - Tiền tệ cơ sở
-   * @returns {Object} Tất cả tỷ giá
-   */
   getAllRates(baseCurrency = 'USD') {
     return this.getExchangeRates(baseCurrency);
   }
 
-  /**
-   * Cập nhật tỷ giá cho một cặp tiền tệ
-   * @param {string} fromCurrency - Tiền tệ nguồn
-   * @param {string} toCurrency - Tiền tệ đích
-   * @param {number} rate - Tỷ giá mới
-   */
-  updateRate(fromCurrency, toCurrency, rate) {
-    if (!this.exchangeRates[fromCurrency.toUpperCase()]) {
-      this.exchangeRates[fromCurrency.toUpperCase()] = {};
-    }
-    this.exchangeRates[fromCurrency.toUpperCase()][toCurrency.toUpperCase()] = rate;
-  }
 
-  /**
-   * Lấy tất cả tỷ giá hiện tại
-   * @returns {Object} Tất cả tỷ giá
-   */
-  getAllExchangeRates() {
-    return this.exchangeRates;
-  }
 
-  /**
-   * Lấy thông tin tiền tệ
-   * @param {string} currency - Mã tiền tệ
-   * @returns {string|null} Tên tiền tệ bằng tiếng Việt
-   */
   getCurrencyInfo(currency) {
     return this.supportedCurrencies[currency.toUpperCase()] || null;
   }
 
-  /**
-   * Tìm kiếm tiền tệ theo tên
-   * @param {string} searchTerm - Từ khóa tìm kiếm
-   * @returns {Array} Danh sách tiền tệ phù hợp
-   */
   searchCurrencies(searchTerm) {
     const results = [];
     const term = searchTerm.toLowerCase();
@@ -524,11 +411,43 @@ class CurrencyExchange {
     
     return results;
   }
+
+  formatCompact(num, decimals = 1) {
+    if (num === 0) return '0';
+    
+    const absNum = Math.abs(num);
+    const sign = num < 0 ? '-' : '';
+    
+    if (absNum >= 1e12) {
+      return sign + (absNum / 1e12).toFixed(decimals) + 'T';
+    } else if (absNum >= 1e9) {
+      return sign + (absNum / 1e9).toFixed(decimals) + 'B';
+    } else if (absNum >= 1e6) {
+      return sign + (absNum / 1e6).toFixed(decimals) + 'M';
+    } else if (absNum >= 1e3) {
+      return sign + (absNum / 1e3).toFixed(decimals) + 'K';
+    } else {
+      return sign + absNum.toString();
+    }
+  }
+
+  formatWithCommas(num, decimals = 0) {
+    if (num === 0) return '0';
+    
+    const absNum = Math.abs(num);
+    const sign = num < 0 ? '-' : '';
+    
+    const formatted = absNum.toLocaleString('en-US', {
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals
+    });
+    
+    return sign + formatted;
+  }
+
 }
 
-// Tạo instance mặc định
 const currencyExchange = new CurrencyExchange();
 
-// Export class và instance
 export default currencyExchange;
 export { CurrencyExchange };

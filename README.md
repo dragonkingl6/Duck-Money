@@ -12,8 +12,6 @@
 - 🚀 **Không cần API**, hoạt động offline hoàn toàn
 - ⚡ **Tốc độ cao**, xử lý ngay lập tức
 - 💰 **Format tiền tệ** theo chuẩn quốc tế
-- 🇻🇳 **Đọc số tiếng Việt**
-- 📦 **Zero dependencies**
 
 ## 📦 Cài đặt
 
@@ -29,18 +27,15 @@ npm install duck-money
 import currencyExchange from 'duck-money';
 ```
 
-### 💱 Quy đổi tiền tệ đơn giản
 
-```javascript
-const result = currencyExchange.convert(100, 'USD', 'VND');
-console.log(`100 USD = ${result} VND`);
-```
 
 ### 📊 Quy đổi với thông tin chi tiết
 
 ```javascript
 const result = currencyExchange.convertDetailed(100, 'USD', 'VND');
 console.log(`${result.amount} ${result.fromCurrency} = ${result.convertedAmount} ${result.toCurrency}`);
+console.log(`Format K,M,B,T: ${result.convertedAmountFormat}`);
+console.log(`Format với dấu phẩy: ${result.convertedAmountCommas}`);
 console.log(`Tỷ giá: 1 ${result.fromCurrency} = ${result.rate} ${result.toCurrency}`);
 ```
 
@@ -49,6 +44,17 @@ console.log(`Tỷ giá: 1 ${result.fromCurrency} = ${result.rate} ${result.toCur
 ```javascript
 const results = currencyExchange.convertMultiple(1000, 'EUR', ['USD', 'VND', 'JPY', 'GBP']);
 console.log(results);
+// Kết quả:
+// {
+//   USD: { amount: 1180, format: "1.2K", commas: "1,180" },
+//   VND: { amount: 24000000, format: "24M", commas: "24,000,000" },
+//   JPY: { amount: 130900, format: "130.9K", commas: "130,900" },
+//   GBP: { amount: 861.8, format: "861.8", commas: "861.8" }
+// }
+
+// Sử dụng kết quả
+console.log(`USD: ${results.USD.amount} (${results.USD.format})`);
+console.log(`VND: ${results.VND.commas}`);
 ```
 
 ### 📈 Lấy tỷ giá
@@ -58,22 +64,14 @@ const rate = currencyExchange.getRate('USD', 'VND');
 console.log(`Tỷ giá USD/VND: ${rate}`);
 ```
 
-## 🛠️ API Reference
-
-### `convert(amount, fromCurrency, toCurrency)`
-Quy đổi tiền tệ và trả về số tiền đã quy đổi
-- `amount`: Số tiền cần quy đổi
-- `fromCurrency`: Tiền tệ nguồn (VD: 'USD', 'EUR', 'VND')
-- `toCurrency`: Tiền tệ đích
-
 ### `convertDetailed(amount, fromCurrency, toCurrency)`
 Quy đổi tiền tệ với thông tin chi tiết
-- Trả về object chứa: amount, fromCurrency, toCurrency, convertedAmount, rate, timestamp
+- Trả về object chứa: amount, fromCurrency, toCurrency, convertedAmount, convertedAmountFormat, convertedAmountCommas, rate, timestamp
 
 ### `convertMultiple(amount, fromCurrency, toCurrencies)`
-Quy đổi sang nhiều tiền tệ cùng lúc
+Quy đổi sang nhiều tiền tệ cùng lúc với các dạng format
 - `toCurrencies`: Mảng các tiền tệ đích
-- Trả về object với key là mã tiền tệ, value là số tiền đã quy đổi
+- Trả về object với key là mã tiền tệ, value là object chứa: amount, format, commas
 
 ### `getRate(fromCurrency, toCurrency)`
 Lấy tỷ giá giữa hai tiền tệ
@@ -93,49 +91,11 @@ Lấy thông tin tiền tệ bằng tiếng Việt
 ### `searchCurrencies(searchTerm)`
 Tìm kiếm tiền tệ theo tên hoặc mã
 
-### `updateRate(fromCurrency, toCurrency, rate)`
-Cập nhật tỷ giá cho một cặp tiền tệ
-
-### `getAllExchangeRates()`
-Lấy tất cả tỷ giá hiện tại
 
 ## 🌍 Tiền tệ được hỗ trợ
 
 ### 💰 Tiền tệ chính
 🇺🇸 USD, 🇪🇺 EUR, 🇬🇧 GBP, 🇯🇵 JPY, 🇨🇳 CNY, 🇻🇳 VND, 🇰🇷 KRW, 🇸🇬 SGD, 🇹🇭 THB, 🇲🇾 MYR, 🇮🇩 IDR, 🇵🇭 PHP, 🇮🇳 INR, 🇦🇺 AUD, 🇨🇦 CAD, 🇨🇭 CHF, 🇳🇿 NZD, 🇸🇪 SEK, 🇳🇴 NOK, 🇩🇰 DKK, 🇵🇱 PLN, 🇨🇿 CZK, 🇭🇺 HUF, 🇷🇺 RUB, 🇹🇷 TRY, 🇧🇷 BRL, 🇲🇽 MXN, 🇿🇦 ZAR, 🇭🇰 HKD, 🇹🇼 TWD, 🇦🇪 AED, 🇸🇦 SAR, 🇶🇦 QAR, 🇰🇼 KWD, 🇧🇭 BHD, 🇴🇲 OMR, 🇯🇴 JOD, 🇱🇧 LBP, 🇪🇬 EGP, 🇳🇬 NGN, 🇬🇭 GHS, 🇰🇪 KES, 🇺🇬 UGX, 🇹🇿 TZS, 🇿🇲 ZMW, 🇧🇼 BWP, 🇳🇦 NAD, 🇲🇺 MUR, 🇸🇨 SCR, 🇲🇻 MVR, 🇱🇰 LKR, 🇧🇩 BDT, 🇳🇵 NPR, 🇵🇰 PKR, 🇦🇫 AFN, 🇮🇷 IRR, 🇮🇶 IQD, 🇸🇾 SYP, 🇾🇪 YER, 🇰🇭 KHR, 🇱🇦 LAK, 🇲🇲 MMK, 🇧🇹 BTN, 🇲🇳 MNT, 🇺🇿 UZS, 🇰🇿 KZT, 🇹🇯 TJS, 🇰🇬 KGS, 🇹🇲 TMT, 🇦🇿 AZN, 🇬🇪 GEL, 🇦🇲 AMD, 🇧🇾 BYN, 🇲🇩 MDL, 🇺🇦 UAH, 🇷🇸 RSD, 🇧🇦 BAM, 🇲🇰 MKD, 🇦🇱 ALL, 🇭🇷 HRK, 🇧🇬 BGN, 🇷🇴 RON, 🇮🇸 ISK, 🇮🇱 ILS, 🇯🇲 JMD, 🇹🇹 TTD, 🇧🇧 BBD, 🇦🇬 XCD, 🇬🇾 GYD, 🇸🇷 SRD, 🇨🇱 CLP, 🇦🇷 ARS, 🇺🇾 UYU, 🇵🇾 PYG, 🇧🇴 BOB, 🇵🇪 PEN, 🇨🇴 COP, 🇻🇪 VEF, 🇨🇷 CRC, 🇵🇦 PAB, 🇳🇮 NIO, 🇭🇳 HNL, 🇬🇹 GTQ, 🇧🇿 BZD, 🇸🇻 SVC, 🇩🇴 DOP, 🇭🇹 HTG, 🇨🇺 CUP, 🇨🇮 XOF, 🇨🇲 XAF, 🇵🇫 XPF, 🇰🇲 KMF, 🇩🇯 DJF, 🇬🇳 GNF, 🇨🇩 CDF, 🇷🇼 RWF, 🇧🇮 BIF, 🇲🇬 MGA
-
-## 💻 Ứng dụng
-
-### 🌐 Ứng dụng web đơn giản
-Tạo form nhập số tiền và chọn tiền tệ nguồn, đích. Sử dụng method `convert()` để quy đổi và hiển thị kết quả.
-
-### 📊 Dashboard tỷ giá
-Tạo dashboard hiển thị tỷ giá của các tiền tệ chính. Sử dụng method `getRate()` để lấy tỷ giá và cập nhật định kỳ.
-
-### 🔄 Cập nhật tỷ giá
-Sử dụng method `updateRate()` để cập nhật tỷ giá theo nhu cầu. Có thể cập nhật từng cặp tiền tệ hoặc nhiều cặp cùng lúc.
-
-## ⚙️ Cấu hình
-
-### 🔄 Cập nhật tỷ giá
-Sử dụng method `updateRate()` để cập nhật tỷ giá cho các cặp tiền tệ cụ thể.
-
-### 🌍 Sử dụng tiền tệ cơ sở khác
-Có thể sử dụng tiền tệ khác làm cơ sở thay vì USD trong method `convertDetailed()`.
-
-## ⚡ Performance
-
-- 🚀 **Tốc độ cao**: Không cần gọi API, xử lý ngay lập tức
-- 🌐 **Không phụ thuộc mạng**: Hoạt động offline hoàn toàn
-- 💾 **Memory efficient**: Tỷ giá được lưu trong memory
-- 🛡️ **Error handling**: Xử lý lỗi gracefully
-
-## 🔒 Bảo mật
-
-- 🔐 **Không lưu trữ thông tin nhạy cảm**
-- 🌐 **Không gửi dữ liệu ra ngoài**
-- ✅ **Validate input** để tránh injection attacks
-- 🏠 **Hoạt động hoàn toàn local**
 
 ## 🤝 Đóng góp
 
