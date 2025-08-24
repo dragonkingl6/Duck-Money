@@ -1,7 +1,7 @@
 {
   "name": "duck-money",
   "version": "1.0.0",
-  "description": "Thư viện quy đổi tiền tệ chính xác cho tất cả quốc gia sử dụng JavaScript thuần",
+  "description": "Thư viện quy đổi tiền tệ chính xác cho tất cả quốc gia sử ",
   "main": "dist/index.js",
   "module": "dist/index.esm.js",
   "types": "dist/index.d.ts",
