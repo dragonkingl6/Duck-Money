@@ -1,6 +1,6 @@
 # 🦆 Duck Money
 
-> Thư viện quy đổi tiền tệ bằng JavaScript thuần, không cần API hay dependencies bên ngoài.
+> Thư viện quy đổi tiền tệ
 
 [![npm version](https://badge.fury.io/js/duck-money.svg)](https://badge.fury.io/js/duck-money)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
