@@ -153,6 +153,7 @@ Có thể sử dụng tiền tệ khác làm cơ sở thay vì USD trong method 
 
 - 📧 **Email**: support@currency-exchange-js.com
 - 🐛 **Issues**: [GitHub Issues](https://github.com/dragonkingl6/)
+- 📖 **Documentation**: [Wiki](https://github.com/dragonkingl6/Duck-Money/)
 
 ## 🙏 Cảm ơn
 
@@ -164,7 +165,7 @@ Cảm ơn bạn đã sử dụng **Duck Money**! Nếu thư viện này hữu í
 
 **Made with ❤️ for the Vietnamese developer community**
 
-[![GitHub stars](https://img.shields.io/github/stars/dragonkingl6/duck-money?style=social)](https://github.com/dragonkingl6/duck-money)
-[![GitHub forks](https://img.shields.io/github/forks/dragonkingl6/duck-money?style=social)](https://github.com/dragonkingl6/duck-money)
+[![GitHub stars](https://img.shields.io/github/stars/dragonkingl6/Duck-Money?style=social)](https://github.com/dragonkingl6/Duck-Money)
+[![GitHub forks](https://img.shields.io/github/forks/dragonkingl6/Duck-Money?style=social)](https://github.com/dragonkingl6/Duck-Money)
 
 </div>

@@ -25,12 +25,12 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/dragonkingl6/duck-money.git"
+    "url": "https://github.com/dragonkingl6/Duck-Money.git"
   },
   "bugs": {
-    "url": "https://github.com/dragonkingl6/duck-money/issues"
+    "url": "https://github.com/dragonkingl6/Duck-Money/issues"
   },
-      "homepage": "https://github.com/dragonkingl6/duck-money#readme",
+      "homepage": "https://github.com/dragonkingl6/Duck-Money#readme",
 
   "devDependencies": {
     "@babel/core": "^7.23.0",
